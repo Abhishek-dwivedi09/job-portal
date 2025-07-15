@@ -1,19 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../shared/Navbar";
 import { Label } from "@radix-ui/react-label";
 import { RadioGroup} from "@/components/ui/radio-group";
 import { Button } from "../ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import axios from "axios";
+import { USER_API_END_POINT } from "../utils/constant";
 
 export default function Login() {
 
-    // const [input, setI]
+    const [input, setInput] = useState(
+      {
+        email:"",
+        password:"",
+        role:"",
+      }
+    )
+    const navigate = useNavigate();
+
+
+    const changeEventHandler = (e) =>{
+      setInput({...input, [e.target.name]:e.target.value})
+    }
+ 
+
+    const submitHandler = async(e) => {
+      e.preventDefault();
+      try {
+       const res = await axios.post(`${USER_API_END_POINT}/login`, input,{
+        headers:{
+         "Content-Type":"application/json"
+        },
+        withCredentials:true
+       })
+       if(res.data.success){
+         navigate("/")
+         toast.success(res.data.message)
+       }
+     
+      } catch (error) {
+       console.log(error);
+       toast.error(error.response.data.message)
+
+      }
+  }
+ 
   return (
     <div>
       <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
-          action=""
+          onSubmit={submitHandler}
           className="w-1/2 border border-gray-200 rounded-md p-4 my-10">
           <h1 className="font-bold text-xl mb-5">Login</h1>
           <div className="my-2  flex flex-col gap-1">
@@ -21,6 +59,9 @@ export default function Login() {
             <input
               type="text"
               placeholder="email"
+              value= {input.email}
+              name= "email"
+              onChange={changeEventHandler}
               className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -29,6 +70,9 @@ export default function Login() {
             <input
               type="text"
               placeholder="password"
+              value= {input.password}
+              name= "password"
+              onChange={changeEventHandler}
               className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>
@@ -43,6 +87,8 @@ export default function Login() {
                   type="radio"
                   name="role"
                   value="student"
+                  checked= {input.role == 'student'}
+                  onChange={changeEventHandler}
                   className="border-2 border-black w-4 h-4 rounded-full data-[state=checked]:bg-black cursor-pointer"
                 />
                 <Label htmlFor="r1">Student</Label>
@@ -52,6 +98,8 @@ export default function Login() {
                   type="radio"
                   name="role"
                   value="recruiter"
+                  checked= {input.role == 'recruiter'}
+                  onChange={changeEventHandler}
                   className="border-2 border-black w-4 h-4 rounded-full data-[state=checked]:bg-black cursor-pointer"
                 />
                 <Label htmlFor="r2">Recruiter</Label>
