@@ -7,8 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "@/redux/authSlice";
 
-console.log("Axios loaded:", axios); // Add this
 
 export default function Signup() {
 
@@ -24,6 +25,8 @@ export default function Signup() {
   )
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+    const {loading} = useSelector(store=>store.auth)
 
   const changeEventHandler = (e) =>{
     setInput({...input, [e.target.name]:e.target.value})
@@ -34,6 +37,8 @@ export default function Signup() {
   }
 
  const submitHandler = async(e) => {
+  dispatch(setLoading(true))
+
      e.preventDefault();
      const formData = new FormData();
      formData.append("fullname",input.fullname);
@@ -61,6 +66,9 @@ export default function Signup() {
       console.log(error);
       toast.error(error.response.data.message)
      }
+     finally{
+      dispatch(setLoading(false))
+    }
  }
 
   return (
@@ -157,9 +165,16 @@ export default function Signup() {
 
             </div>
           </div>
-          <Button type="submit" className =" w-full my-4 bg-black text-white hover:bg-gray-900">
+          
+            {
+              loading ? <Button className="w-full my-4"> <Loader2 className="mr-2 h-4 w-4 animate-spin"/>Please wait</Button>:<Button type="submit" className =" w-full my-4 bg-black text-white hover:bg-gray-900">
+              Signup
+            </Button>
+              }
+          
+          {/* <Button type="submit" className =" w-full my-4 bg-black text-white hover:bg-gray-900">
             Signup
-          </Button>
+          </Button> */}
           <span className="text-sm">Already have an account? <Link to ="/login" className="text-blue-600">Log in</Link></span>
         </form>
       </div>
