@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { USER_API_END_POINT } from "../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "@/redux/authSlice";
+import { setLoading,setUser } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react";
 
 export default function Login() {
@@ -41,13 +41,17 @@ export default function Login() {
         withCredentials:true
        })
        if(res.data.success){
+         dispatch(setUser(res.data.user))
          navigate("/")
          toast.success(res.data.message)
        }
      
       } catch (error) {
        console.log(error);
-       toast.error(error.response.data.message)
+      //  toast.error(error.response.data.message)
+      console.log('Error status:', error?.response?.status);
+
+      toast.error(error?.response?.data?.message || "Something went wrong")
 
       }
       finally{
