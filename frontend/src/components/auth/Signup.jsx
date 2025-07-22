@@ -6,9 +6,10 @@ import { Button } from "../ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import axios from "axios";
-import { USER_API_END_POINT } from "../utils/constant";
+import { USER_API_END_POINT } from "../../utils/constant";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
+import { Loader2 } from "lucide-react";
 
 
 export default function Signup() {
