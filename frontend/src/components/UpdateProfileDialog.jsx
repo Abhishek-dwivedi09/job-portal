@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { setUser, setLoading } from "@/redux/authSlice"
+import { setAuthUser, setLoading } from "@/redux/authSlice"
 import axios from "axios"
 import { Loader2 } from "lucide-react"
 import { useState } from "react"
@@ -57,7 +57,7 @@ export function UpdateProfileDialog({ open, setOpen }) {
                 withCredentials: true
             });
             if (res.data.success) {
-                dispatch(setUser(res.data.user));
+                dispatch(setAuthUser(res.data.user));
                 toast.success(res.data.message);
             }
         } catch (error) {

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Button } from '../ui/button'
 import { Link } from 'react-router-dom'
-import { ProfilePopover } from '../ProfilePopover';
 import { useSelector } from 'react-redux';
+import { ProfilePopover } from '../ProfilePopover';
 
 const Navbar = () => {
     const { authUser } = useSelector(store => store.auth);

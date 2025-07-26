@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import { toast } from "sonner"
 import { useDispatch, useSelector } from "react-redux"
-import { setUser } from "@/redux/authSlice"
+import { setAuthUser } from "@/redux/authSlice"
 
 export function ProfilePopover() {
     const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export function ProfilePopover() {
             const res = await axios.get("https://jobportal-youtube.onrender.com/api/v1/user/logout", { withCredentials: true });
             
             if (res.data.success) {
-                dispatch(setUser(null));
+                dispatch(setAuthUser(null));
                 navigate("/");
                 toast.success(res.data.message);
             }
