@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { useDispatch, useSelector } from 'react-redux';
+import { JOB_API_END_POINT,APPLICATION_API_END_POINT} from '@/utils/constant';
 import { toast } from 'sonner';
 import axios from 'axios';
 import { setSingleJobById } from '@/redux/jobSlice';
@@ -20,7 +21,7 @@ const JobDescription = () => {
   const applyJobHandler = async () => {
     try {
       axios.defaults.withCredentials = true;
-      const res = await axios.get(`http://localhost:8000/api/v1/application/apply/${params.id}`);
+      const res = await axios.post(`${APPLICATION_API_END_POINT}/apply/${params.id}`,{withCredentials:true});
       if (res.data.success) {
         setIsApplied(true); // Update the local state
         const updatedJob = { ...singleJobById, applications: [...singleJobById.applications, { applicant: authUser._id }] };
@@ -37,7 +38,8 @@ const JobDescription = () => {
     const fetchSingleJob = async () => {
       try {
         axios.defaults.withCredentials = true;
-        const res = await axios.get(`http://localhost:8000/api/v1/job/${params.id}`);
+        const res = await axios.get(`${JOB_API_END_POINT}/get/${params.id}`,{withCredentials:true});
+        console.log(res);
         if (res.data.success) {
           dispatch(setSingleJobById(res.data.job));
           setIsApplied(res.data.job.applications.some(application => application.applicant === authUser?._id)); // Ensure the state is in sync with fetched data
@@ -75,7 +77,7 @@ const JobDescription = () => {
         <h1 className='font-bold my-1'>Role: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.title}</span></h1>
         <h1 className='font-bold my-1'>Location: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.location}</span></h1>
         <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.description}</span></h1>
-        <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.experienceLevel}</span></h1>
+        <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.experianceLevel}</span></h1>
         <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.salary} LPA</span></h1>
         <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.applications?.length}</span></h1>
         <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJobById?.createdAt.split("T")[0]}</span></h1>

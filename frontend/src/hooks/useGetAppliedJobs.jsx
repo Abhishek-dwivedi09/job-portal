@@ -2,6 +2,7 @@ import { setAllAppliedJobs } from '@/redux/applicationSlice';
 import axios from 'axios'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import {APPLICATION_API_END_POINT} from '../utils/constant'
 
 const useGetAppliedJobs = () => {
     const dispatch = useDispatch();
@@ -9,9 +10,12 @@ const useGetAppliedJobs = () => {
         const fetchAppliedJobs = async () => {
             try {
                 axios.defaults.withCredentials = true;
-                const res = await axios.get('https://jobportal-youtube.onrender.com/api/v1/application/get');
+                const res = await axios.get(`${APPLICATION_API_END_POINT}/get`,{withCredentials:true});
+                console.log(res);
                 if (res.data.success) {
                     dispatch(setAllAppliedJobs(res.data.application))
+                    // dispatch(setAllAppliedJobs(res.data.appliedJob)) // UPDATED LINE
+
                 }
             } catch (error) {
                 console.log(error);
@@ -21,4 +25,4 @@ const useGetAppliedJobs = () => {
     }, [])
 }
 
-export default useGetAppliedJobs
+export default useGetAppliedJobs;

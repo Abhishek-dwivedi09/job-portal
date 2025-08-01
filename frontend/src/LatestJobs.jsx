@@ -1,5 +1,5 @@
 import React from 'react'
-import LatestJobsCards from './components/LatestJobsCards';
+import LatestJobsCards from './components/LatestJobCards';
 
 const randomJobs = [1,2,3,4,5,6,7,8];
 

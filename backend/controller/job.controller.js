@@ -67,27 +67,19 @@ export const getAllJob = async(req,res)=>{
 } 
 
 export const  getJobById = async (req,res) =>{
-    try {
-        const id = req.params.id;
-
-        const jobs = await Job.findById(id);
-     
-        if(!jobs){
-          return res.status(404).json({
-             message:"job not found",
-             success:false
-          })
-        }
-     
-         return res.status(200).json({
-         jobs,
-         success: true
-     
-     }) 
-        
-    } catch (error) {
-         console.log(error)
-    }
+  try {
+    const jobId = req.params.id;
+    const job = await Job.findById(jobId).populate({
+        path:"applications",
+    });
+    if(!job) return res.status(404).json({
+        message:"Job not found.",
+        success:false
+    }) 
+    return res.status(200).json({success:true, job});
+} catch (error) {
+    return res.status(400).json({message:"Failed to get job"});
+}
 }  
 
 
